@@ -23,18 +23,6 @@ class UserApplicationService:
         return schemas.User.from_orm(await self._repo.get(id=self._current_user.id))
 
     @filters(roles=[UserRole.USER])
-    async def get_user(self, user_id: str) -> schemas.UserSmall:
-        """
-        Get user by id # todo: by all fields
-        """
-        user = await self._repo.get(id=user_id)
-
-        if not user:
-            raise NotFound(f"User with id {user_id!r} not found")
-
-        return schemas.UserSmall.from_orm(user)
-
-    @filters(roles=[UserRole.USER])
     async def update_me(self, data: schemas.UserUpdate) -> None:
         await self._repo.update(
             id=self._current_user.id,

@@ -2,6 +2,7 @@ from src.models import tables
 from . import repository
 from . import auth
 from .password import PasswordApplicationService
+from .resource import ResourceApplicationService
 from .user import UserApplicationService
 
 
@@ -37,3 +38,7 @@ class ServiceFactory:
     @property
     def password(self) -> PasswordApplicationService:
         return PasswordApplicationService(self._repo.password, current_user=self._current_user, debug=self._debug)
+
+    @property
+    def resource(self) -> ResourceApplicationService:
+        return ResourceApplicationService(self._repo.resource, current_user=self._current_user, debug=self._debug)

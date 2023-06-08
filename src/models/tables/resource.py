@@ -6,16 +6,16 @@ from sqlalchemy.orm import relationship
 from src.db import Base
 
 
-class Password(Base):
-    __tablename__ = "passwords"
+class Resource(Base):
+    __tablename__ = "resources"
     __table_args__ = {'extend_existing': True}
 
     id = Column(Text(length=36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    username = Column(String(255), unique=False, nullable=True)
-    hashed_password = Column(String(255), nullable=False)
+    title = Column(String(255), unique=False, nullable=True)
 
-    resource_id = Column(Text(length=36), ForeignKey("resources.id"), nullable=True)
-    resource = relationship("models.tables.resource.Resource", back_populates="passwords")
+    owner_id = Column(Text(length=36), ForeignKey("users.id"), nullable=True)
+    owner = relationship("models.tables.user.User", back_populates="resources")
+    passwords = relationship("models.tables.password.Password", back_populates="resource")
 
     create_at = Column(DateTime(timezone=True), server_default=func.now())
     update_at = Column(DateTime(timezone=True), onupdate=func.now())

@@ -19,7 +19,7 @@ class User(Base):
     hashed_password = Column(String(255), nullable=False)
     role = Column(Enum(UserRole), default=UserRole.USER)
 
-    passwords = relationship("models.tables.password.Password", back_populates="owner")
+    resources = relationship("models.tables.resource.Resource", back_populates="owner")
 
     create_at = Column(DateTime(timezone=True), server_default=func.now())
     update_at = Column(DateTime(timezone=True), onupdate=func.now())
