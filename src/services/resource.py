@@ -16,5 +16,9 @@ class ResourceApplicationService:
         self._debug = debug
 
     @filters(roles=[UserRole.USER])
-    async def list(self) -> list[schemas.Resource]:
+    async def get_list(self, page: int, per_page: int, query: str | None, order_by: str) -> list[schemas.Resource]:
         return [schemas.Resource.from_orm(resource) for resource in await self._repo.list()]
+
+    @filters(roles=[UserRole.USER])
+    def create_resource(self, data: schemas.NewResource):
+        pass

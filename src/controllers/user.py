@@ -9,20 +9,13 @@ from src.dependencies.services import get_services
 from src.models import schemas
 from src.services import ServiceFactory
 
-from src.views.user import UserSmallResponse
-from src.views.user import UserBigResponse
-
+from src.views.user import UserResponse
 router = APIRouter()
 
 
-@router.get("/current", response_model=UserBigResponse, status_code=http_status.HTTP_200_OK)
+@router.get("/current", response_model=UserResponse, status_code=http_status.HTTP_200_OK)
 async def get_current_user(services: ServiceFactory = Depends(get_services)):
-    return UserBigResponse(message=await services.user.get_me())
-
-
-@router.get("/{user_id}", response_model=UserSmallResponse, status_code=http_status.HTTP_200_OK)
-async def get_user(user_id: uuid.UUID, services: ServiceFactory = Depends(get_services)):
-    return UserSmallResponse(message=await services.user.get_user(str(user_id)))
+    return UserResponse(message=await services.user.get_me())
 
 
 @router.post("/update", response_model=None, status_code=http_status.HTTP_204_NO_CONTENT)

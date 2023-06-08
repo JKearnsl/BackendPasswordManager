@@ -42,10 +42,7 @@ class AuthApplicationService:
         """
 
         if await self._user_repo.get_by_username_insensitive(user.username):
-            raise AlreadyExists("User already exists")
-
-        if await self._user_repo.get_by_email_insensitive(user.email):
-            raise AlreadyExists("User already exists")
+            raise AlreadyExists("Пользователь с таким именем уже существует")
 
         hashed_password = get_hashed_password(user.password)
 
