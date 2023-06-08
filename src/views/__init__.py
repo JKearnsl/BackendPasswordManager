@@ -1,3 +1,4 @@
 from .base import BaseView
-from .user import UserBigResponse
-from .user import UserSmallResponse
+from .user import UserResponse
+from .password import PasswordListResponse
+from .resource import ResourceListResponse

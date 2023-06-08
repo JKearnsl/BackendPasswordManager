@@ -1,10 +1,6 @@
 from src.views.base import BaseView
-from src.models.schemas import User, UserSmall
+from src.models.schemas import User
 
 
-class UserBigResponse(BaseView):
+class UserResponse(BaseView):
     message: User
-
-
-class UserSmallResponse(BaseView):
-    message: UserSmall
