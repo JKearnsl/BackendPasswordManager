@@ -13,5 +13,5 @@ services:
     image: redis:latest
     restart: always
     volumes:
-      - /opt/redis_data/fastapi_template:/data
+      - /opt/redis_data/password_manager:/data
     command: redis-server --save 60 1 --loglevel warning
