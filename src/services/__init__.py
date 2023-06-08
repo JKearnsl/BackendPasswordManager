@@ -1,7 +1,7 @@
 from src.models import tables
 from . import repository
 from . import auth
-from .admin import AdminApplicationService
+from .password import PasswordApplicationService
 from .user import UserApplicationService
 
 
@@ -35,5 +35,5 @@ class ServiceFactory:
         )
 
     @property
-    def admin(self) -> AdminApplicationService:
-        return AdminApplicationService(self._repo.user, current_user=self._current_user, debug=self._debug)
+    def password(self) -> PasswordApplicationService:
+        return PasswordApplicationService(self._repo.password, current_user=self._current_user, debug=self._debug)

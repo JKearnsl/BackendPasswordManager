@@ -1,6 +1,7 @@
 import uuid
 
 from sqlalchemy import Column, String, Enum, DateTime, func, Text
+from sqlalchemy.orm import relationship
 
 # from sqlalchemy import UUID  # Only for psql
 
@@ -14,10 +15,11 @@ class User(Base):
     __table_args__ = {'extend_existing': True}
 
     id = Column(Text(length=36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    email = Column(String(255), unique=True, nullable=False)
     username = Column(String(255), unique=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
     role = Column(Enum(UserRole), default=UserRole.USER)
+
+    passwords = relationship("models.tables.password.Password", back_populates="owner")
 
     create_at = Column(DateTime(timezone=True), server_default=func.now())
     update_at = Column(DateTime(timezone=True), onupdate=func.now())
