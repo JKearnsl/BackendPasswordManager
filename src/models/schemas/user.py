@@ -12,8 +12,8 @@ class User(BaseModel):
     id: uuid.UUID
     username: str
     role: UserRole
-    create_at: datetime
-    update_at: Optional[datetime]
+    created_at: datetime
+    updated_at: datetime | None
 
     class Config:
         orm_mode = True

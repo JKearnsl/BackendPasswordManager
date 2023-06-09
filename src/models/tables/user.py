@@ -21,8 +21,8 @@ class User(Base):
 
     resources = relationship("models.tables.resource.Resource", back_populates="owner")
 
-    create_at = Column(DateTime(timezone=True), server_default=func.now())
-    update_at = Column(DateTime(timezone=True), onupdate=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     def __repr__(self):
         return f'<{self.__class__.__name__}: {self.id}>'
