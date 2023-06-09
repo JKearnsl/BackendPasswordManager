@@ -7,7 +7,7 @@ from src.dependencies.services import get_services
 from src.models import schemas
 from src.services import ServiceFactory
 
-from src.views import ResourceListResponse
+from src.views import ResourceListResponse, ResourceResponse
 
 router = APIRouter()
 
@@ -17,7 +17,7 @@ async def get_list(
         page: int = 1,
         per_page: int = 10,
         query: str = None,
-        order_by: str = "id",
+        order_by: str = "created_at",
         services: ServiceFactory = Depends(get_services)
 ):
     return ResourceListResponse(message=await services.resource.get_list(
@@ -28,7 +28,7 @@ async def get_list(
     ))
 
 
-@router.get("/new", status_code=http_status.HTTP_201_CREATED)
+@router.post("/new", status_code=http_status.HTTP_201_CREATED, response_model=ResourceResponse)
 async def create(data: schemas.NewResource, services: ServiceFactory = Depends(get_services)):
-    await services.resource.create_resource(data)
+    return ResourceResponse(message=await services.resource.create_resource(data))
 
