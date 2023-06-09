@@ -12,6 +12,7 @@ from src.exceptions import APIError, handle_api_error, handle_404_error, handle_
 
 from src.router import reg_root_api_router
 from src.utils import RedisClient
+from src.utils.fakeredis import FakeRedisPool
 from src.utils.openapi import custom_openapi
 
 config = load_ini_config('./config.ini')
@@ -58,7 +59,7 @@ async def redis_pool(db: int = 0):
 async def on_startup():
     log.debug("Выполнение FastAPI startup event handler.")
     await init_sqlite_db()
-    app.state.redis = RedisClient(await redis_pool())
+    app.state.redis = RedisClient(FakeRedisPool())
 
 
 @app.on_event("shutdown")

@@ -4,6 +4,8 @@ import logging
 import redis.asyncio as redis
 from redis.exceptions import RedisError
 
+from src.utils.fakeredis import FakeRedisPool
+
 
 class RedisClient:
     """Определение утилиты Redis.
@@ -13,7 +15,7 @@ class RedisClient:
         log (logging.Logger): Обработчик ведения журнала для этого класса.
     """
 
-    def __init__(self, pool: redis.Redis = None):
+    def __init__(self, pool: redis.Redis | FakeRedisPool = None):
         self.redis_client = pool
         self.log = logging.getLogger(__name__)
 
