@@ -4,7 +4,7 @@ from typing import Optional
 from src.exceptions import AccessDenied, NotFound
 from src.models import tables, schemas
 from src.models.enums.role import UserRole
-from src.services.auth.utils import filters
+from src.services.auth.filters import role_filter
 from src.services.repository import UserRepo
 
 
@@ -15,20 +15,20 @@ class UserApplicationService:
         self._current_user = current_user
         self._debug = debug
 
-    @filters(roles=[UserRole.USER])
+    @role_filter(UserRole.USER)
     async def get_me(self) -> schemas.User:
         """
         Get UserBigResponse
         """
         return schemas.User.from_orm(await self._repo.get(id=self._current_user.id))
 
-    @filters(roles=[UserRole.USER])
+    @role_filter(UserRole.USER)
     async def update_me(self, data: schemas.UserUpdate) -> None:
         await self._repo.update(
             id=self._current_user.id,
             **data.dict(exclude_unset=True)
         )
 
-    @filters(roles=[UserRole.USER])
+    @role_filter(UserRole.USER)
     async def delete_me(self) -> None:
         await self._repo.delete(id=self._current_user.id)
