@@ -35,6 +35,11 @@ class AlreadyExists(APIError):
         super().__init__(message=message, status_code=409)
 
 
+class BadRequest(APIError):
+    def __init__(self, message: str = "Bad Request") -> None:
+        super().__init__(message=message, status_code=400)
+
+
 async def handle_api_error(request, exc):
     return JSONResponse(
         status_code=exc.status_code,
