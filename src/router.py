@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from src.controllers import auth
 from src.controllers import user
-from src.controllers import password
+from src.controllers import datum
 from src.controllers import resource
 from src.controllers import stats
 

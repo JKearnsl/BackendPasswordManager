@@ -6,5 +6,5 @@ from src.models import tables
 from src.services.repository.base import BaseRepository
 
 
-class PasswordRepo(BaseRepository[tables.Password]):
-    table = tables.Password
+class DatumRepo(BaseRepository[tables.Datum]):
+    table = tables.Datum

@@ -1,5 +1,5 @@
 from .user import UserRepo
-from .password import PasswordRepo
+from .password import DatumRepo
 from .resource import ResourceRepo
 
 
@@ -13,8 +13,8 @@ class RepoFactory:
         return UserRepo(self._session)
 
     @property
-    def password(self) -> PasswordRepo:
-        return PasswordRepo(self._session)
+    def datum(self) -> DatumRepo:
+        return DatumRepo(self._session)
 
     @property
     def resource(self) -> ResourceRepo:

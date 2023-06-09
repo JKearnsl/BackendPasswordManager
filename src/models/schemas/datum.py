@@ -3,7 +3,7 @@ import uuid
 from pydantic import BaseModel, validator
 
 
-class Password(BaseModel):
+class Datum(BaseModel):
     id: uuid.UUID
     username: str | None
     password: str | None
@@ -12,6 +12,6 @@ class Password(BaseModel):
         orm_mode = True
 
 
-class NewPassword(BaseModel):
+class NewDatum(BaseModel):
     username: str | None
     password: str | None

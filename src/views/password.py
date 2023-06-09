@@ -1,6 +1,6 @@
 from src.views.base import BaseView
-from src.models.schemas import Password
+from src.models.schemas import Datum
 
 
-class PasswordListResponse(BaseView):
-    message: list[Password | None]
+class DatumListResponse(BaseView):
+    message: list[Datum | None]

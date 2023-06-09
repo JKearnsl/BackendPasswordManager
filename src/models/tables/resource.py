@@ -15,7 +15,7 @@ class Resource(Base):
 
     owner_id = Column(Text(length=36), ForeignKey("users.id"), nullable=True)
     owner = relationship("models.tables.user.User", back_populates="resources")
-    passwords = relationship("models.tables.password.Password", back_populates="resource")
+    data = relationship("models.tables.datum.Datum", back_populates="resource")
 
     create_at = Column(DateTime(timezone=True), server_default=func.now())
     update_at = Column(DateTime(timezone=True), onupdate=func.now())

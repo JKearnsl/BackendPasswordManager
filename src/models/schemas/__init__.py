@@ -6,8 +6,8 @@ from .user import UserUpdate
 from .user import UserSignIn
 from .user import UserSignUp
 
-from .password import Password
-from .password import NewPassword
+from .datum import Datum
+from .datum import NewDatum
 
 from .resource import Resource
 from .resource import NewResource
