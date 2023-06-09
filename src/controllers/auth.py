@@ -6,7 +6,7 @@ from fastapi import status as http_status
 from src.dependencies.services import get_services
 from src.models import schemas
 from src.services import ServiceFactory
-from src.views import UserBigResponse
+from src.views import UserResponse
 
 router = APIRouter()
 
@@ -16,9 +16,9 @@ async def sign_up(user: schemas.UserSignUp, service: ServiceFactory = Depends(ge
     await service.auth.create_user(user)
 
 
-@router.post("/signIn", status_code=http_status.HTTP_200_OK, response_model=UserBigResponse)
+@router.post("/signIn", status_code=http_status.HTTP_200_OK, response_model=UserResponse)
 async def sign_in(user: schemas.UserSignIn, response: Response, service: ServiceFactory = Depends(get_services)):
-    return UserBigResponse(message=await service.auth.authenticate(user.username, user.password, response))
+    return UserResponse(message=await service.auth.authenticate(user.username, user.password, response))
 
 
 @router.post('/logout', status_code=http_status.HTTP_204_NO_CONTENT)
