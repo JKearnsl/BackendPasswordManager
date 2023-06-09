@@ -16,7 +16,13 @@ class ResourceApplicationService:
         self._debug = debug
 
     @role_filter(UserRole.USER)
-    async def get_list(self, page: int, per_page: int, query: str | None = None, order_by: str = "created_at") -> list[schemas.Resource]:
+    async def get_list(
+            self,
+            page: int,
+            per_page: int,
+            query: str | None = None,
+            order_by: str = "created_at"
+    ) -> list[schemas.Resource]:
         if page < 1:
             raise NotFound("Страница не найдена")
         if per_page < 1:

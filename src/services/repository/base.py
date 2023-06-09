@@ -33,7 +33,12 @@ class BaseRepository(Generic[T]):
         """
         return (await self._session.execute(select(self.table).filter_by(**kwargs))).scalars().first()
 
-    async def get_all(self, limit: int = 100, offset: int = 0, order_by: str = "created_at", **kwargs) -> list[Optional[T]]:
+    async def get_all(
+            self, limit: int = 100,
+            offset: int = 0,
+            order_by: str = "created_at",
+            **kwargs
+    ) -> list[Optional[T]]:
         """
         Получает все записи
 
