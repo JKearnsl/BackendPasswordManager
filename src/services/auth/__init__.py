@@ -9,7 +9,7 @@ from src.services.repository import UserRepo
 
 from .jwt import JWTManager
 from .session import SessionManager
-from .utils import filters
+from .filters import role_filter
 from .password import verify_password, get_hashed_password
 
 
@@ -28,7 +28,7 @@ class AuthApplicationService:
         self._current_user = current_user
         self._debug = debug
 
-    @filters(roles=[UserRole.GUEST])
+    @role_filter(UserRole.GUEST)
     async def create_user(self, user: schemas.UserSignUp) -> None:
         """
         Создание нового пользователя
@@ -48,7 +48,7 @@ class AuthApplicationService:
 
         await self._user_repo.create(**user.dict(exclude={"password"}), hashed_password=hashed_password)
 
-    @filters(roles=[UserRole.GUEST])
+    @role_filter(UserRole.GUEST)
     async def authenticate(self, username: str, password: str, response: Response) -> schemas.User:
         """
         Аутентификация пользователя
@@ -77,7 +77,7 @@ class AuthApplicationService:
         await self._session.set_session_id(response, tokens.refresh_token)
         return schemas.User.from_orm(user)
 
-    @filters(roles=[UserRole.ADMIN, UserRole.USER])
+    @role_filter(UserRole.USER)
     async def logout(self, request: Request, response: Response) -> None:
         """
         Выход пользователя
@@ -90,7 +90,7 @@ class AuthApplicationService:
         if session_id:
             await self._session.delete_session_id(session_id, response)
 
-    @filters(roles=[UserRole.ADMIN, UserRole.USER])
+    @role_filter(UserRole.USER)
     async def refresh_tokens(self, request: Request, response: Response) -> None:
         """
         Обновление токенов
