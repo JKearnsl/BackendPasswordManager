@@ -11,7 +11,7 @@ from src.views import UserResponse
 router = APIRouter()
 
 
-@router.put("/signUp", status_code=http_status.HTTP_201_CREATED)
+@router.post("/signUp", status_code=http_status.HTTP_201_CREATED)
 async def sign_up(user: schemas.UserSignUp, service: ServiceFactory = Depends(get_services)):
     await service.auth.create_user(user)
 

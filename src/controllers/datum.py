@@ -30,6 +30,6 @@ async def get_list(
     ))
 
 
-@router.get("/new", status_code=http_status.HTTP_201_CREATED)
+@router.post("/new", status_code=http_status.HTTP_201_CREATED, response_model=uuid.UUID)
 async def create(resource_id: uuid.UUID, data: schemas.NewDatum, services: ServiceFactory = Depends(get_services)):
-    await services.datum.create_datum(resource_id, data)
+    return await services.datum.create_datum(resource_id, data)

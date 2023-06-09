@@ -18,7 +18,7 @@ async def get_current_user(services: ServiceFactory = Depends(get_services)):
     return UserResponse(message=await services.user.get_me())
 
 
-@router.post("/update", response_model=None, status_code=http_status.HTTP_204_NO_CONTENT)
+@router.put("/update", response_model=None, status_code=http_status.HTTP_204_NO_CONTENT)
 async def update_user(data: schemas.UserUpdate, services: ServiceFactory = Depends(get_services)):
     await services.user.update_me(data)
 
