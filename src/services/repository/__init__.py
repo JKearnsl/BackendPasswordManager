@@ -1,5 +1,5 @@
 from .user import UserRepo
-from .password import DatumRepo
+from .datum import DatumRepo
 from .resource import ResourceRepo
 
 

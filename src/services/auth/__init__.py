@@ -64,7 +64,7 @@ class AuthApplicationService:
         :raise AccessDenied if user is banned
         """
 
-        user: tables.User = await self._user_repo.get_by_username_insensitive(username=username)
+        user: tables.User = await self._user_repo.get_by_username_insensitive(username=username) # TODO: не работает
         if not user:
             raise NotFound("User not found")
         if not verify_password(password, user.hashed_password):

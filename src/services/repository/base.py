@@ -36,7 +36,7 @@ class BaseRepository(Generic[T]):
     async def get_all(
             self, limit: int = 100,
             offset: int = 0,
-            order_by: str = "created_at",
+            order_by: str = "id",
             **kwargs
     ) -> list[Optional[T]]:
         """

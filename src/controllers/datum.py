@@ -17,19 +17,15 @@ async def get_list(
         resource_id: uuid.UUID,
         page: int = 1,
         per_page: int = 10,
-        query: str = None,
-        order_by: str = "id",
         services: ServiceFactory = Depends(get_services)
 ):
     return DatumListResponse(message=await services.datum.get_list(
-        resource_id=resource_id,
+        resource_id=str(resource_id),
         page=page,
-        per_page=per_page,
-        query=query,
-        order_by=order_by
+        per_page=per_page
     ))
 
 
-@router.post("/new", status_code=http_status.HTTP_201_CREATED, response_model=uuid.UUID)
+@router.post("/new", status_code=http_status.HTTP_201_CREATED)
 async def create(resource_id: uuid.UUID, data: schemas.NewDatum, services: ServiceFactory = Depends(get_services)):
-    return await services.datum.create_datum(resource_id, data)
+    await services.datum.create_datum(str(resource_id), data)

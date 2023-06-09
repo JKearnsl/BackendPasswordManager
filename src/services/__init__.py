@@ -37,7 +37,9 @@ class ServiceFactory:
 
     @property
     def datum(self) -> DatumApplicationService:
-        return DatumApplicationService(self._repo.datum, current_user=self._current_user, debug=self._debug)
+        return DatumApplicationService(
+            self._repo.datum,resource_repo=self._repo.resource, current_user=self._current_user, debug=self._debug
+        )
 
     @property
     def resource(self) -> ResourceApplicationService:
