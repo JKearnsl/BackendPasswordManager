@@ -1,6 +1,6 @@
 from typing import Generic, Type, TypeVar, Optional
 
-from sqlalchemy import insert, update, delete, func, select
+from sqlalchemy import insert, update, delete, func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 T = TypeVar('T')
@@ -9,8 +9,8 @@ T = TypeVar('T')
 class BaseRepository(Generic[T]):
     table: Type[T]
 
-    def __init__(self, conn: AsyncSession):
-        self._conn = conn
+    def __init__(self, session: AsyncSession):
+        self._session = session
 
     async def create(self, **kwargs) -> T:
         """
@@ -19,9 +19,10 @@ class BaseRepository(Generic[T]):
         :param kwargs:
         :return:
         """
-        data = await self._conn.execute(insert(self.table).values(**kwargs))
-        await self._conn.commit()
-        return data
+        model = self.table(**kwargs)
+        self._session.add(model)
+        await self._session.commit()
+        return model
 
     async def get(self, **kwargs) -> Optional[T]:
         """
@@ -30,17 +31,22 @@ class BaseRepository(Generic[T]):
         :param kwargs:
         :return:
         """
-        return (await self._conn.execute(select(self.table).filter_by(**kwargs))).scalars().first()
+        return (await self._session.execute(select(self.table).filter_by(**kwargs))).scalars().first()
 
-    async def get_all(self, **kwargs) -> list[Optional[T]]:
+    async def get_all(self, limit: int = 100, offset: int = 0, order_by: str = "created_at", **kwargs) -> list[Optional[T]]:
         """
         Получает все записи
-        (лимит 100)
 
-        :param kwargs:
+        :param limit: лимит 100
+        :param offset: смещение 0
+        :param kwargs: filter by
+        :param order_by: сортировка
         :return:
         """
-        return (await self._conn.execute(select(self.table).filter_by(**kwargs).limit(100))).scalars().all()
+        result = await self._session.execute(
+            select(self.table).filter_by(**kwargs).order_by(text(order_by)).limit(limit).offset(offset)
+        )
+        return result.scalars().all()
 
     async def update(self, id: str, **kwargs) -> None:
         """
@@ -51,8 +57,8 @@ class BaseRepository(Generic[T]):
         :return:
         """
         if kwargs:
-            await self._conn.execute(update(self.table).where(self.table.id == id).values(**kwargs))
-            await self._conn.commit()
+            await self._session.execute(update(self.table).where(self.table.id == id).values(**kwargs))
+            await self._session.commit()
 
     async def delete(self, id: str) -> None:
         """
@@ -61,8 +67,8 @@ class BaseRepository(Generic[T]):
         :param id:
         :return:
         """
-        await self._conn.execute(delete(self.table).where(self.table.id == id))
-        await self._conn.commit()
+        await self._session.execute(delete(self.table).where(self.table.id == id))
+        await self._session.commit()
 
     async def count(self, **kwargs) -> int:
         """
@@ -71,4 +77,4 @@ class BaseRepository(Generic[T]):
         :param kwargs:
         :return:
         """
-        return (await self._conn.execute(select(func.count()).where(**kwargs))).scalar()
+        return (await self._session.execute(select(func.count()).where(**kwargs))).scalar()

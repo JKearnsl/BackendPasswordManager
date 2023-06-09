@@ -10,6 +10,6 @@ class UserRepo(BaseRepository[tables.User]):
     table = tables.User
 
     async def get_by_username_insensitive(self, username: str) -> Optional[tables.User]:
-        return (await self._conn.execute(
+        return (await self._session.execute(
             select(self.table).where(func.lower(self.table.username) == username.lower())
         )).scalar_one_or_none()
