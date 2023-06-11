@@ -15,9 +15,12 @@ class User(Base):
     __table_args__ = {'extend_existing': True}
 
     id = Column(Text(length=36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    username = Column(String(255), unique=True, nullable=False)
-    hashed_password = Column(String(255), nullable=False)
+    username = Column(Text(32), unique=True, nullable=False)
+    hashed_password = Column(Text(64), nullable=False)
     role = Column(Enum(UserRole), default=UserRole.USER)
+
+    public_key = Column(Text(), nullable=False)
+    enc_private_key = Column(Text(), nullable=False)
 
     resources = relationship("models.tables.resource.Resource", back_populates="owner")
 

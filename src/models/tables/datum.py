@@ -11,8 +11,8 @@ class Datum(Base):
     __table_args__ = {'extend_existing': True}
 
     id = Column(Text(length=36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    username = Column(String(255), nullable=True)
-    password = Column(String(255), nullable=True)
+    username = Column(Text(64), nullable=True)
+    password = Column(Text(128), nullable=True)
 
     resource_id = Column(Text(length=36), ForeignKey("resources.id"), nullable=True)
     resource = relationship("models.tables.resource.Resource", back_populates="data")
