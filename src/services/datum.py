@@ -47,7 +47,7 @@ class DatumApplicationService:
     @role_filter(UserRole.USER)
     async def create_datum(self, resource_id: str, data: schemas.NewDatum):
         if not data.username and not data.password:
-            raise AccessDenied("Отсутствуют данные для авторизации")
+            raise BadRequest("Отсутствуют данные")
 
         resource = await self._resource_repo.get(id=resource_id)
         if not resource:
