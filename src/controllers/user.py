@@ -9,7 +9,8 @@ from src.dependencies.services import get_services
 from src.models import schemas
 from src.services import ServiceFactory
 
-from src.views.user import UserResponse
+from src.views.user import UserResponse, KeysResponse
+
 router = APIRouter()
 
 
@@ -23,7 +24,12 @@ async def update_user(data: schemas.UserUpdate, services: ServiceFactory = Depen
     await services.user.update_me(data)
 
 
+@router.get("/keys", response_model=KeysResponse, status_code=http_status.HTTP_200_OK)
+async def get_keys(services: ServiceFactory = Depends(get_services)):
+    return KeysResponse(message=await services.user.get_keys())
+
+
 @router.delete("/delete", response_model=None, status_code=http_status.HTTP_204_NO_CONTENT)
 async def delete_user(request: Request, response: Response, services: ServiceFactory = Depends(get_services)):
     await services.user.delete_me()
-    await services.auth.logout(request, response)  # TODO: разлогин через Redis
+    await services.auth.logout(request, response)

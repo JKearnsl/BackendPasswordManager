@@ -22,6 +22,8 @@ class User(BaseModel):
 class UserSignUp(BaseModel):
     username: str
     password: str
+    public_key: str
+    enc_private_key: str
 
     @validator('username')
     def username_len(cls, value):
@@ -35,6 +37,22 @@ class UserSignUp(BaseModel):
             raise ValueError("Слабый или инвалидный пароль")
         return value
 
+    @validator('public_key')
+    def public_key_len(cls, value):
+        if value is None:
+            return None
+        if not validators.is_base64(value):
+            raise ValueError("Инвалидный public_key: не является base64")
+        return value
+
+    @validator('enc_private_key')
+    def enc_private_key_len(cls, value):
+        if value is None:
+            return None
+        if not validators.is_base64(value):
+            raise ValueError("Инвалидный enc_private_key: не является base64")
+        return value
+
 
 class UserSignIn(BaseModel):
     username: str
@@ -42,10 +60,38 @@ class UserSignIn(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    username: Optional[str]
+    username: str | None
+    public_key: str | None
+    enc_private_key: str | None
 
     @validator('username')
     def username_len(cls, value):
+        if value is None:
+            return None
         if not validators.is_valid_username(value):
             raise ValueError("Инвалидный username")
         return value
+
+    @validator('public_key')
+    def public_key_len(cls, value):
+        if value is None:
+            return None
+        if not validators.is_base64(value):
+            raise ValueError("Инвалидный public_key: не является base64")
+        return value
+
+    @validator('enc_private_key')
+    def enc_private_key_len(cls, value):
+        if value is None:
+            return None
+        if not validators.is_base64(value):
+            raise ValueError("Инвалидный enc_private_key: не является base64")
+        return value
+
+
+class Keys(BaseModel):
+    public_key: str
+    enc_private_key: str
+
+    class Config:
+        orm_mode = True

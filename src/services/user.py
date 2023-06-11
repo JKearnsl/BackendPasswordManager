@@ -7,7 +7,6 @@ from src.models.enums.role import UserRole
 from src.services.auth.filters import role_filter
 from src.services.repository import UserRepo
 
-
 class UserApplicationService:
 
     def __init__(self, user_repo: UserRepo, *, current_user: Optional[tables.User], debug: bool = False):
@@ -17,10 +16,11 @@ class UserApplicationService:
 
     @role_filter(UserRole.USER)
     async def get_me(self) -> schemas.User:
-        """
-        Get UserBigResponse
-        """
         return schemas.User.from_orm(await self._repo.get(id=self._current_user.id))
+
+    @role_filter(UserRole.USER)
+    async def get_keys(self) -> schemas.Keys:
+        return schemas.Keys.from_orm(await self._repo.get(id=self._current_user.id))
 
     @role_filter(UserRole.USER)
     async def update_me(self, data: schemas.UserUpdate) -> None:

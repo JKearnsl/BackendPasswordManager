@@ -5,6 +5,7 @@ from .user import User
 from .user import UserUpdate
 from .user import UserSignIn
 from .user import UserSignUp
+from .user import Keys
 
 from .datum import Datum
 from .datum import NewDatum
