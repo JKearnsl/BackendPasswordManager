@@ -53,7 +53,6 @@ async def handle_api_error(request, exc):
 
 
 async def handle_pydantic_error(request, exc: ValidationError):
-    some = exc.errors()
     return JSONResponse(  # todo: parse it
         status_code=400,
         content=BaseView(
@@ -73,6 +72,9 @@ async def handle_pydantic_error(request, exc: ValidationError):
 
 
 async def handle_404_error(request, exc):
+    if isinstance(exc, NotFound):
+        return await handle_api_error(request, exc)
+
     return JSONResponse(
         status_code=exc.status_code,
         content=BaseView(
