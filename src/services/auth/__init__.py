@@ -10,7 +10,6 @@ from src.services.repository import UserRepo
 from .jwt import JWTManager
 from .session import SessionManager
 from .filters import role_filter
-from .password import verify_password, get_hashed_password
 
 
 class AuthApplicationService:
@@ -42,38 +41,42 @@ class AuthApplicationService:
         """
 
         if await self._user_repo.get_by_username_insensitive(user.username):
-            raise AlreadyExists("Пользователь с таким именем уже существует")
+            raise AlreadyExists(f"Пользователь {user.username!r} уже существует")
 
-        hashed_password = get_hashed_password(user.password)
-
-        await self._user_repo.create(**user.dict(exclude={"password"}), hashed_password=hashed_password)
+        await self._user_repo.create(**user.dict())
 
     @role_filter(UserRole.GUEST)
-    async def authenticate(self, username: str, password: str, response: Response) -> schemas.User:
+    async def authenticate(self, username: str, hashed_password: str, response: Response) -> schemas.User:
         """
         Аутентификация пользователя
 
+        PS: В качестве соли хеша используется
+        имя пользователя
+
+        TODO: Возможная оптимизация - искать пользователя по хешу пароля
+
         :param username:
-        :param password:
+        :param hashed_password:
         :param response:
 
         :return: User
 
-        :raise AlreadyExists if user is already logged in
-        :raise NotFound if user not found
-        :raise AccessDenied if user is banned
+        :raise AlreadyExists: if user is already logged in
+        :raise NotFound: if user not found
+        :raise AccessDenied: if user is banned
         """
 
-        user: tables.User = await self._user_repo.get_by_username_insensitive(username=username) # TODO: не работает
+        user: tables.User = await self._user_repo.get_by_username_insensitive(username=username)  # TODO: не работает
         if not user:
-            raise NotFound("User not found")
-        if not verify_password(password, user.hashed_password):
-            raise NotFound("User not found")
+            raise NotFound("Пользователь не найден")
+        if hashed_password != user.hashed_password:
+            raise NotFound("Неверная пара логин/пароль")
         if user.role == UserRole.BANNED:
-            raise AccessDenied("User is banned")
+            raise AccessDenied("Пользователь заблокирован")
+
         # генерация и установка токенов
         tokens = self._jwt.generate_tokens(user.id, user.username, user.role.value)
-        self._jwt.set_jwt_cookie(response, tokens)
+        self._jwt.set_jwt_cookie(response, tokens)  # todo менять подход
         await self._session.set_session_id(response, tokens.refresh_token)
         return schemas.User.from_orm(user)
 

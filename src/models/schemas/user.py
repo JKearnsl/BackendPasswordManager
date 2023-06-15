@@ -1,6 +1,5 @@
 import uuid
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, validator
 
@@ -21,7 +20,7 @@ class User(BaseModel):
 
 class UserSignUp(BaseModel):
     username: str
-    password: str
+    hashed_password: str
     public_key: str
     enc_private_key: str
 
@@ -29,12 +28,6 @@ class UserSignUp(BaseModel):
     def username_len(cls, value):
         if not validators.is_valid_username(value):
             raise ValueError("Инвалидный username")
-        return value
-
-    @validator('password')
-    def password_must_be_valid(cls, value):
-        if not validators.is_valid_password(value):
-            raise ValueError("Слабый или инвалидный пароль")
         return value
 
     @validator('public_key')
@@ -56,11 +49,12 @@ class UserSignUp(BaseModel):
 
 class UserSignIn(BaseModel):
     username: str
-    password: str
+    hashed_password: str
 
 
 class UserUpdate(BaseModel):
     username: str | None
+    hashed_password: str | None
     public_key: str | None
     enc_private_key: str | None
 
