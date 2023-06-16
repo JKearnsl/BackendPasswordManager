@@ -59,7 +59,11 @@ async def redis_pool(db: int = 0):
 async def on_startup():
     log.debug("Выполнение FastAPI startup event handler.")
     await init_sqlite_db()
-    app.state.redis = RedisClient(FakeRedisPool())
+    if config.DB.REDIS:
+        rp = await redis_pool()
+    else:
+        rp = FakeRedisPool()
+    app.state.redis = RedisClient(rp)
 
 
 @app.on_event("shutdown")

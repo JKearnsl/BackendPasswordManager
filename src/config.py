@@ -67,8 +67,8 @@ def load_ini_config(path: str | os.PathLike, encoding="utf-8") -> Config:
     config.read(filenames=path, encoding=encoding)
 
     return Config(
-        DEBUG=bool(int(os.getenv('DEBUG', 1))),
-        IS_SECURE_COOKIE=bool(config["BASE"]["IS_SECURE_COOKIE"]),
+        DEBUG=str_to_bool(str(os.getenv('DEBUG', 1))),
+        IS_SECURE_COOKIE=str_to_bool(config["BASE"]["IS_SECURE_COOKIE"]),
         BASE=Base(
             TITLE=config["BASE"]["TITLE"],
             DESCRIPTION=config["BASE"]["DESCRIPTION"],
