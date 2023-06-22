@@ -1,6 +1,3 @@
-import uuid
-from typing import Optional
-
 from src.exceptions import AccessDenied, NotFound, BadRequest
 from src.models import tables, schemas
 from src.models.enums.role import UserRole
@@ -46,7 +43,7 @@ class DatumApplicationService:
 
     @role_filter(UserRole.USER)
     async def create_datum(self, resource_id: str, data: schemas.NewDatum):
-        if not data.username and not data.password:
+        if not data.username and not data.enc_password:
             raise BadRequest("Отсутствуют данные")
 
         resource = await self._resource_repo.get(id=resource_id)
@@ -56,5 +53,5 @@ class DatumApplicationService:
         if resource.owner_id != self._current_user.id:
             raise AccessDenied("Вы не являетесь владельцем ресурса")
 
-        result = await self._repo.create(resource_id=resource_id, username=data.username, password=data.password)
+        result = await self._repo.create(resource_id=resource_id, username=data.username, enc_password=data.enc_password)
         return schemas.Datum.from_orm(result)
