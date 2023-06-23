@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, String, Enum, DateTime, func, Text
+from sqlalchemy import Column, Enum, DateTime, func, VARCHAR, Text
 from sqlalchemy.orm import relationship
 
 # from sqlalchemy import UUID  # Only for psql
@@ -14,9 +14,9 @@ class User(Base):
     __tablename__ = "users"
     __table_args__ = {'extend_existing': True}
 
-    id = Column(Text(length=36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    username = Column(Text(32), unique=True, nullable=False)
-    hashed_password = Column(Text(64), nullable=False)
+    id = Column(VARCHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    username = Column(VARCHAR(32), unique=True, nullable=False)
+    hashed_password = Column(VARCHAR(64), nullable=False)
     role = Column(Enum(UserRole), default=UserRole.USER)
 
     public_key = Column(Text(), nullable=False)

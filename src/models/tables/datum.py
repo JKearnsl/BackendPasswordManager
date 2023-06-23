@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, VARCHAR, Enum, DateTime, func, Text, ForeignKey, CHAR
+from sqlalchemy import Column, VARCHAR, DateTime, func, ForeignKey, CHAR
 from sqlalchemy.orm import relationship
 
 from src.db import Base
@@ -10,7 +10,7 @@ class Datum(Base):
     __tablename__ = "data"
     __table_args__ = {'extend_existing': True}
 
-    id = Column(CHAR(length=36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = Column(CHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     username = Column(VARCHAR(64), nullable=True)
     enc_password = Column(VARCHAR(356), nullable=True)
 
