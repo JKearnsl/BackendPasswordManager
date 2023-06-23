@@ -2,7 +2,7 @@
 [BASE]
 TITLE = FastAPI Boilerplate
 DESCRIPTION = FastAPI Boilerplate
-IS_SECURE_COOKIE = False
+IS_SECURE_COOKIE = 0
 
 
 [CONTACT]
@@ -15,7 +15,7 @@ ACCESS_SECRET_KEY = your_access_secret_key
 REFRESH_SECRET_KEY = your_refresh_secret_key
 
 [REDIS]
-is_used = True
+is_used = 0
 HOST = redis
 USERNAME =
 PASSWORD =
