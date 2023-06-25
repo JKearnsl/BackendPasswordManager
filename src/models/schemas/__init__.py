@@ -10,6 +10,7 @@ from .user import Keys
 
 from .datum import Datum
 from .datum import NewDatum
+from .datum import UpdateDatum
 
 from .resource import Resource
 from .resource import NewResource

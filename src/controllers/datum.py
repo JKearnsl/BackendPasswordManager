@@ -29,3 +29,13 @@ async def get_list(
 @router.post("/new", status_code=http_status.HTTP_201_CREATED)
 async def create(resource_id: uuid.UUID, data: schemas.NewDatum, services: ServiceFactory = Depends(get_services)):
     await services.datum.create_datum(str(resource_id), data)
+
+
+@router.delete("/delete", status_code=http_status.HTTP_204_NO_CONTENT)
+async def delete(datum_id: uuid.UUID, services: ServiceFactory = Depends(get_services)):
+    await services.datum.delete_datum(str(datum_id))
+
+
+@router.post("/update", status_code=http_status.HTTP_204_NO_CONTENT)
+async def update(resource_id: uuid.UUID, data: schemas.UpdateDatum, services: ServiceFactory = Depends(get_services)):
+    await services.datum.update_datum(str(resource_id), data)

@@ -42,3 +42,7 @@ class NewDatum(BaseModel):
         if len(value) != 356:
             raise ValueError("Инвалидный enc_password: не является RSA 2136 bits")
         return value
+
+
+class UpdateDatum(NewDatum):
+    pass

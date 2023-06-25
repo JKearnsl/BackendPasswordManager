@@ -55,3 +55,33 @@ class DatumApplicationService:
 
         result = await self._repo.create(resource_id=resource_id, username=data.username, enc_password=data.enc_password)
         return schemas.Datum.from_orm(result)
+
+    @role_filter(UserRole.USER)
+    async def delete_datum(self, datum_id: str):
+        datum = await self._repo.get(id=datum_id)
+        if not datum:
+            raise NotFound("Запись не найдена")
+
+        resource = await self._resource_repo.get(id=datum.resource_id)
+        if not resource:
+            raise NotFound("Ресурс не найден")
+
+        if resource.owner_id != self._current_user.id:
+            raise AccessDenied("Вы не являетесь владельцем ресурса")
+
+        await self._repo.delete(id=datum_id)
+
+    @role_filter(UserRole.USER)
+    async def update_datum(self, datum_id: str, data: schemas.UpdateDatum):
+        datum = await self._repo.get(id=datum_id)
+        if not datum:
+            raise NotFound("Запись не найдена")
+
+        resource = await self._resource_repo.get(id=datum.resource_id)
+        if not resource:
+            raise NotFound("Ресурс не найден")
+
+        if resource.owner_id != self._current_user.id:
+            raise AccessDenied("Вы не являетесь владельцем ресурса")
+
+        await self._repo.update(id=datum_id, username=data.username, enc_password=data.enc_password)
