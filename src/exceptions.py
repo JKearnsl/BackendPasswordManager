@@ -40,6 +40,11 @@ class BadRequest(APIError):
         super().__init__(message=message, status_code=400)
 
 
+class ConflictError(APIError):
+    def __init__(self, message: str = "Conflict") -> None:
+        super().__init__(message=message, status_code=409)
+
+
 async def handle_api_error(request, exc):
     return JSONResponse(
         status_code=exc.status_code,
