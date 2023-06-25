@@ -25,7 +25,7 @@ class UserSignUp(BaseModel):
     enc_private_key: str
 
     @validator('username')
-    def username_len(cls, value):
+    def username_valid(cls, value):
         if not validators.is_valid_username(value):
             raise ValueError("Инвалидный username")
         return value
@@ -52,35 +52,31 @@ class UserSignIn(BaseModel):
     hashed_password: str
 
 
-class UserUpdate(BaseModel):
-    username: str | None
-    hashed_password: str | None
+class UsernameUpdate(BaseModel):
+    username: str
+    new_hashed_password: str
+    old_hashed_password: str
 
     @validator('username')
-    def username_len(cls, value):
-        if value is None:
-            return None
+    def username_valid(cls, value):
         if not validators.is_valid_username(value):
             raise ValueError("Инвалидный username")
-        return value
-
-    @validator('public_key')
-    def public_key_len(cls, value):
-        if value is None:
-            return None
-        if not validators.is_base64(value):
-            raise ValueError("Инвалидный public_key: не является base64")
         return value
 
 
 class UserKeysUpdate(BaseModel):
     public_key: str
     enc_private_key: str
+    hashed_password: str
+
+    @validator('public_key')
+    def public_key_len(cls, value):
+        if not validators.is_base64(value):
+            raise ValueError("Инвалидный public_key: не является base64")
+        return value
 
     @validator('enc_private_key')
     def enc_private_key_len(cls, value):
-        if value is None:
-            return None
         if not validators.is_base64(value):
             raise ValueError("Инвалидный enc_private_key: не является base64")
         return value

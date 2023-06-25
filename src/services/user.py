@@ -1,11 +1,13 @@
-import uuid
 from typing import Optional
 
-from src.exceptions import AccessDenied, NotFound
+from src.exceptions import AccessDenied, ConflictError
 from src.models import tables, schemas
 from src.models.enums.role import UserRole
 from src.services.auth.filters import role_filter
 from src.services.repository import UserRepo
+
+
+# todo: тип current_user определен неправильно
 
 class UserApplicationService:
 
@@ -23,10 +25,43 @@ class UserApplicationService:
         return schemas.Keys.from_orm(await self._repo.get(id=self._current_user.id))
 
     @role_filter(UserRole.USER)
-    async def update_me(self, data: schemas.UserUpdate) -> None:
+    async def update_username(self, data: schemas.UsernameUpdate) -> None:
+        some_user = await self._repo.get_by_username_insensitive(username=data.username)
+        if some_user:
+            raise ConflictError(f"Имя {data.username!r} уже занято")
+
+        user = await self._repo.get(id=self._current_user.id)
+        if data.old_hashed_password != user.hashed_password:
+            raise AccessDenied("Неверный пароль")
+
         await self._repo.update(
             id=self._current_user.id,
-            **data.dict(exclude_unset=True)
+            username=data.username,
+            hashed_password=data.new_hashed_password
+        )
+
+    @role_filter(UserRole.USER)
+    async def update_password(self, new_hashed_password: str, old_hashed_password: str, new_enc_private_key: str):
+        user = await self._repo.get(id=self._current_user.id)
+        if user.hashed_password != old_hashed_password:
+            raise AccessDenied("Неверный пароль")
+
+        await self._repo.update(
+            id=self._current_user.id,
+            hashed_password=new_hashed_password,
+            enc_private_key=new_enc_private_key
+        )
+
+    @role_filter(UserRole.USER)
+    async def update_keys(self, data: schemas.UserKeysUpdate) -> None:
+        user = await self._repo.get(id=self._current_user.id)
+        if data.hashed_password != user.hashed_password:
+            raise AccessDenied("Неверный пароль")
+
+        await self._repo.update(
+            id=self._current_user.id,
+            public_key=data.public_key,
+            enc_private_key=data.enc_private_key
         )
 
     @role_filter(UserRole.USER)
