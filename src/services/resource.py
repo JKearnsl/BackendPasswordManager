@@ -53,3 +53,25 @@ class ResourceApplicationService:
 
         data = await self._repo.create(owner_id=self._current_user.id, title=data.title)
         return schemas.Resource.from_orm(data)
+
+    @role_filter(UserRole.USER)
+    async def delete_resource(self, resource_id: str):
+        resource = await self._repo.get(id=resource_id)
+        if not resource:
+            raise NotFound(f"Ресурс не найден")
+
+        if resource.owner_id != self._current_user.id:
+            raise AccessDenied("Нет доступа к ресурсу")
+
+        await self._repo.delete(id=resource_id)
+
+    @role_filter(UserRole.USER)
+    async def update_resource(self, resource_id: str, data: schemas.UpdateResource):
+        resource = await self._repo.get(id=resource_id)
+        if not resource:
+            raise NotFound(f"Ресурс не найден")
+
+        if resource.owner_id != self._current_user.id:
+            raise AccessDenied("Нет доступа к ресурсу")
+
+        await self._repo.update(id=resource_id, title=data.title)

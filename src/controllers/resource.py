@@ -32,3 +32,16 @@ async def get_list(
 async def create(data: schemas.NewResource, services: ServiceFactory = Depends(get_services)):
     return ResourceResponse(message=await services.resource.create_resource(data))
 
+
+@router.delete("/delete", status_code=http_status.HTTP_204_NO_CONTENT)
+async def delete(resource_id: uuid.UUID, services: ServiceFactory = Depends(get_services)):
+    await services.resource.delete_resource(str(resource_id))
+
+
+@router.put("/update", status_code=http_status.HTTP_204_NO_CONTENT)
+async def update(
+        resource_id: uuid.UUID,
+        data: schemas.UpdateResource,
+        services: ServiceFactory = Depends(get_services)
+):
+    await services.resource.update_resource(str(resource_id), data)

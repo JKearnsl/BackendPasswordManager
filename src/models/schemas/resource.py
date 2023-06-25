@@ -23,3 +23,7 @@ class NewResource(BaseModel):
         if len(v) > 128:
             raise ValueError('Title должен быть не более 128 символов')
         return v
+
+
+class UpdateResource(BaseModel):
+    title: str

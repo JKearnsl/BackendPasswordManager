@@ -13,6 +13,7 @@ from .datum import NewDatum
 
 from .resource import Resource
 from .resource import NewResource
+from .resource import UpdateResource
 
 from .error import Error
 from .error import FieldErrorItem
