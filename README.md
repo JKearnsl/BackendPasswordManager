@@ -64,7 +64,7 @@ https://github.com/JKearnsl/BackendPasswordManager/blob/418c7e59ccb561c8b5771c99
 По-умолчанию, приложение использует `HS256` алгоритм для подписи `JWT` токенов. Ключи подписи хранятся 
 в конфигурационном файле:
 
-https://github.com/JKearnsl/BackendPasswordManager/blob/418c7e59ccb561c8b5771c99e17095114bfc8dd5/config.ini.example#L13C1-L15
+https://github.com/JKearnsl/BackendPasswordManager/blob/418c7e59ccb561c8b5771c99e17095114bfc8dd5/config.ini.example#L13-L15
 
 ### DEBUG MODE
 
