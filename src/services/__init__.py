@@ -1,4 +1,4 @@
-from src.models import tables
+from src.models.auth import BaseUser
 from . import repository
 from . import auth
 from .datum import DatumApplicationService
@@ -11,7 +11,7 @@ class ServiceFactory:
             self,
             repo_factory: repository.RepoFactory,
             *,
-            current_user: tables.User,
+            current_user: BaseUser,
             config, redis_client,
             debug: bool = False
     ):

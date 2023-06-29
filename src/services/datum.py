@@ -1,5 +1,6 @@
 from src.exceptions import AccessDenied, NotFound, BadRequest
-from src.models import tables, schemas
+from src.models import schemas
+from src.models.auth import BaseUser
 from src.models.enums.role import UserRole
 from src.services.auth.filters import role_filter
 from src.services.repository import DatumRepo, ResourceRepo
@@ -12,7 +13,7 @@ class DatumApplicationService:
             datum_repo: DatumRepo,
             *,
             resource_repo: ResourceRepo,
-            current_user: tables.User,
+            current_user: BaseUser,
             debug: bool = True
     ):
         self._repo = datum_repo

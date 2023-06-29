@@ -1,8 +1,6 @@
-import uuid
-from typing import Optional
-
 from src.exceptions import AccessDenied, NotFound, BadRequest, AlreadyExists
-from src.models import tables, schemas
+from src.models import schemas
+from src.models.auth import BaseUser
 from src.models.enums.role import UserRole
 from src.services.auth.filters import role_filter
 from src.services.repository import ResourceRepo
@@ -10,7 +8,7 @@ from src.services.repository import ResourceRepo
 
 class ResourceApplicationService:
 
-    def __init__(self, resource_repo: ResourceRepo, *, current_user: Optional[tables.User], debug: bool = False):
+    def __init__(self, resource_repo: ResourceRepo, *, current_user: BaseUser, debug: bool = False):
         self._repo = resource_repo
         self._current_user = current_user
         self._debug = debug

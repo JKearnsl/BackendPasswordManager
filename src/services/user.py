@@ -1,17 +1,14 @@
-from typing import Optional
-
 from src.exceptions import AccessDenied, ConflictError
-from src.models import tables, schemas
+from src.models import schemas
+from src.models.auth import BaseUser
 from src.models.enums.role import UserRole
 from src.services.auth.filters import role_filter
 from src.services.repository import UserRepo
 
 
-# todo: тип current_user определен неправильно
-
 class UserApplicationService:
 
-    def __init__(self, user_repo: UserRepo, *, current_user: Optional[tables.User], debug: bool = False):
+    def __init__(self, user_repo: UserRepo, *, current_user: BaseUser, debug: bool = False):
         self._repo = user_repo
         self._current_user = current_user
         self._debug = debug

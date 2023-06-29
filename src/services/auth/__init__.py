@@ -3,6 +3,7 @@ from fastapi.responses import Response
 
 from src.exceptions import AccessDenied, NotFound, AlreadyExists
 from src.models import tables
+from src.models.auth import BaseUser
 from src.models import schemas
 from src.models.enums.role import UserRole
 from src.services.repository import UserRepo
@@ -18,7 +19,7 @@ class AuthApplicationService:
             jwt: JWTManager,
             session: SessionManager,
             user_repo: UserRepo,
-            current_user: tables.User,
+            current_user: BaseUser,
             debug: bool = False
     ):
         self._jwt = jwt
