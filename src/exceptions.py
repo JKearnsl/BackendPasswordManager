@@ -58,7 +58,7 @@ async def handle_api_error(request, exc):
 
 
 async def handle_pydantic_error(request, exc: ValidationError):
-    return JSONResponse(  # todo: parse it
+    return JSONResponse(
         status_code=400,
         content=BaseView(
             error=Error(

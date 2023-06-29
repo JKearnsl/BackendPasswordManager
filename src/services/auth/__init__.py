@@ -67,7 +67,7 @@ class AuthApplicationService:
         :raise AccessDenied: if user is banned
         """
 
-        user: tables.User = await self._user_repo.get_by_username_insensitive(username=username)  # TODO: не работает
+        user: tables.User = await self._user_repo.get_by_username_insensitive(username=username)
         if not user:
             raise NotFound("Пользователь не найден")
         if hashed_password != user.hashed_password:
@@ -122,7 +122,7 @@ class AuthApplicationService:
 
         new_tokens = self._jwt.generate_tokens(user.id, user.username, user.role.value)
         self._jwt.set_jwt_cookie(response, new_tokens)
-        # Для бесшовного обновления токенов: # TODO: возможно убрать отсюда
+        # Для бесшовного обновления токенов:
         request.cookies["access_token"] = new_tokens.access_token
         request.cookies["refresh_token"] = new_tokens.refresh_token
 
